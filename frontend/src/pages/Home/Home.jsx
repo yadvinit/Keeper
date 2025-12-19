@@ -4,7 +4,6 @@ import { MdAdd } from "react-icons/md"
 import Modal from "react-modal"
 import AddEditNotes from "./AddEditNotes"
 import { useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
 import Navbar from "../../components/Navbar"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -22,7 +21,7 @@ const Home = () => {
 
   // console.log(allNotes)
 
-  const navigate = useNavigate()
+  
 
   const [openAddEditModal, setOpenAddEditModal] = useState({
     isShown: false,
@@ -31,13 +30,14 @@ const Home = () => {
   })
 
   useEffect(() => {
-    if (currentUser === null || !currentUser) {
-      navigate("/login")
-    } else {
+    if (currentUser) {
       setUserInfo(currentUser?.rest)
       getAllNotes()
+    } else {
+      setUserInfo(null)
+      setAllNotes([])
     }
-  }, [])
+  }, [currentUser])
 
   // get all notes
   const getAllNotes = async () => {
