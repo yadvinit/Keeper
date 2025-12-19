@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom"
 import Navbar from "../../components/Navbar"
 import axios from "axios"
 import { toast } from "react-toastify"
-import EmptyCard from "../../components/EmptyCard/EmptyCard"
+import EmptyCard from "../../components/Cards/EmptyCard"
 
 const Home = () => {
   const { currentUser, loading, errorDispatch } = useSelector(
@@ -115,7 +115,7 @@ const Home = () => {
 
     try {
       const res = await axios.put(
-        "http://localhost:3000/api/note/update-note-pinned/" + noteId,
+        "http://localhost:3000/api/note/updatePin/" + noteId,
         { isPinned: !noteData.isPinned },
         { withCredentials: true }
       )

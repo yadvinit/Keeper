@@ -1,111 +1,93 @@
-import React, { useState } from "react"
-import PasswordInput from "../../components/Input/PasswordInput"
-import { Link, useNavigate } from "react-router-dom"
-import { validateEmail } from "../../utils/helper"
-import axios from "axios"
-import { toast } from "react-toastify"
+import React from 'react'
+import { useState } from 'react'
+import PasswordInput from '../../components/Input/PasswordInput'
+import { Link } from 'react-router-dom'
+import { validateEmail } from '../../utils/helper'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios';
 
-const Signup = () => {
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
-
+const Signup= () => {
+  const [email, setEmail] = useState('')
+  const [Username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
   const navigate = useNavigate()
 
-  const handleSignUp = async (e) => {
+  const handleSignup= async(e) =>{
     e.preventDefault()
-
-    if (!name) {
-      setError("Please enter your name")
+    if(!Username){
+      setError('Username is required')
       return
     }
-
-    if (!validateEmail(email)) {
-      setError("Please enter a valid email address")
+    if(!validateEmail(email)){
+      setError('Invalid email address')
       return
     }
-
-    if (!password) {
-      setError("Please enter the password")
+    if(!password){
+      setError('Password is required')
       return
     }
 
     setError("")
 
-    // sign up api
-    try {
-      const res = await axios.post(
-        "http://localhost:3000/api/auth/signup",
-        { username: name, email, password },
-        { withCredentials: true }
-      )
+    //signup api
 
-      if (res.data.success === false) {
+    try {
+      const res = await axios.post("http://localhost:3000/api/auth/signup",
+        {username:Username,email,password},{withCredentials:true})
+
+      if(res.data.success === false){
         setError(res.data.message)
-        toast.error(res.data.message)
         return
       }
-
-      toast.success(res.data.message)
-
       setError("")
-
-      navigate("/login")
+      navigate('/login')
+      
     } catch (error) {
-      toast.error(error.message)
-      console.log(error.message)
       setError(error.message)
+      
     }
+
   }
 
   return (
-    <>
-      <div className="flex items-center justify-center mt-28">
-        <div className="w-96 border rounded bg-white px-7 py-10">
-          <form onSubmit={handleSignUp}>
-            <h4 className="text-2xl mb-7">Sign Up</h4>
+    <div className="flex items-center justify-center mt-28">
+      <div className="w-96 border rounded bg-white px-7 py-10">
+        <form onSubmit={handleSignup}>
+          <h4 className="text-2xl mb-7">Signup </h4>
+          <input 
+            type="text"
+            placeholder="Username" 
+            className="input-box" 
+            value={Username} 
+            onChange={(e)=>{setUsername(e.target.value)}}
+            
+          />
+          <input 
+            type="text"
+            placeholder="Email" 
+            className="input-box" 
+            value={email} 
+            onChange={(e)=>{setEmail(e.target.value)}} 
+          />
 
-            <input
-              type="text"
-              placeholder="Name"
-              className="input-box"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-
-            <input
-              type="text"
-              placeholder="Email"
-              className="input-box"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-
-            <PasswordInput
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-
-            {error && <p className="text-red-500 text-sm pb-1">{error}</p>}
-
-            <button type="submit" className="btn-primary">
-              SIGN UP
-            </button>
-
-            <p className="text-sm text-center mt-4">
-              Already have an account?{" "}
-              <Link
-                to={"/login"}
-                className="font-medium text-[#2B85FF] underline"
-              >
-                Login
-              </Link>
-            </p>
-          </form>
-        </div>
+          
+          <PasswordInput 
+            value={password} 
+            onChange={(e)=>{setPassword(e.target.value)}} 
+            
+          />
+          {error && <p className="text-red-500 text-sm pb-1">{error}</p>}
+          <button type="submit" className="btn-primary">Signup</button>
+          <p className="text-sm text-center mt-4">
+            Already a member?
+            <Link to={"/Login"} className="font-medium text-[#2B85FF]"> Login to account</Link>
+          </p>
+        
+        </form>
       </div>
-    </>
+      
+    </div>
   )
 }
 
