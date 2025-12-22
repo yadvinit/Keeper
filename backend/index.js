@@ -20,7 +20,7 @@ const app = express();
 //to make input in jason
 app.use(express.json());
 app.use(cookieParser())
-app.use(cors({origin:["http://localhost:5173"],credentials:true})); //to allow cross origin requests
+app.use(cors({origin:process.env.CORS_ORIGIN})); //to allow cross origin requests
  
 
 app.use('/api/auth',authRouter) //app.use(path, router)

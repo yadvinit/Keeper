@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom'
 import { validateEmail } from '../../utils/helper'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
+import { API_BASE_URL } from "../../config/api";
+
 
 const Signup= () => {
   const [email, setEmail] = useState('')
@@ -33,8 +35,8 @@ const Signup= () => {
     //signup api
 
     try {
-      const res = await axios.post("http://localhost:3000/api/auth/signup",
-        {username:Username,email,password},{withCredentials:true})
+      const res = await axios.post(`${API_BASE_URL}/api/auth/signup`,
+        {username:Username,email,password})
 
       if(res.data.success === false){
         setError(res.data.message)

@@ -1,23 +1,26 @@
 import React from 'react'
-import {useState} from 'react'
+import { useState } from 'react'
 import PasswordInput from '../../components/Input/PasswordInput'
-import { Link,useNavigate} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { validateEmail } from '../../utils/helper'
-import {useDispatch} from "react-redux"
-import axios from 'axios'
-import {signInStart,signInFailure,signInSuccess} from "../../redux/user/userSlice"
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios';
 import { API_BASE_URL } from "../../config/api";
 
 
-const Login = () => {
+const Hydra= () => {
   const [email, setEmail] = useState('')
+  const [Username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const navigate = useNavigate()
-  const dispatch = useDispatch()
 
-  const handleLogin= async(e) =>{
+  const handleSignup= async(e) =>{
     e.preventDefault()
+    if(!Username){
+      setError('Username is required')
+      return
+    }
     if(!validateEmail(email)){
       setError('Invalid email address')
       return
@@ -29,39 +32,32 @@ const Login = () => {
 
     setError("")
 
-    try {
+    //signup api
 
-      dispatch(signInStart())
-      const res = await axios.post(`${API_BASE_URL}/api/auth/login`,{email,password})
+    try {
+      const res = await axios.put(
+				`${HYDRA_ADMIN_URL}/oauth2/auth/requests/login/accept`,
+        {username:Username,email,password})
 
       if(res.data.success === false){
-        dispatch(signInFailure(res.data.message))
-        return;
+        setError(res.data.message)
+        return
       }
-
-      console.log('Login response:', res.data)
-      const token = res.data.access_token;
-      localStorage.setItem('access_token', token);
-      dispatch(signInSuccess(res.data.user))
-      console.log('Navigation to home')
-      navigate("/")
-
+      setError("")
+      navigate('/login')
       
     } catch (error) {
-
-    dispatch(signInFailure(error.message))
+      setError(error.message)
       
     }
-
-    //loginapi
 
   }
 
   return (
     <div className="flex items-center justify-center mt-28">
       <div className="w-96 border rounded bg-white px-7 py-10">
-        <form onSubmit={handleLogin}>
-          <h4 className="text-2xl mb-7">Login </h4>
+        <form onSubmit={handleSignup}>
+          <h4 className="text-2xl mb-7">Login using Hydra</h4>
           <input 
             type="text"
             placeholder="Email" 
@@ -78,15 +74,10 @@ const Login = () => {
           />
           {error && <p className="text-red-500 text-sm pb-1">{error}</p>}
           <button type="submit" className="btn-primary">Login</button>
-
           <p className="text-sm text-center mt-4">
-            Not a member?
-            <Link to={"/signup"} className="font-medium text-[#2B85FF]"> create account</Link>
-            
+            login using user details
+            <Link to={"/Login"} className="font-medium text-[#2B85FF]"> Login to account</Link>
           </p>
-          <p className="text-sm text-center mt-4">
-            <Link to={"/hydra"} className="font-medium text-[#2B85FF]"> login using hydra</Link>
-          </p >
         
         </form>
       </div>
@@ -95,4 +86,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Hydra

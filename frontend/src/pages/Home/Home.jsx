@@ -8,6 +8,9 @@ import Navbar from "../../components/Navbar"
 import axios from "axios"
 import { toast } from "react-toastify"
 import EmptyCard from "../../components/Cards/EmptyCard"
+import { useNavigate } from "react-router-dom"
+import { API_BASE_URL } from "../../config/api";
+
 
 const Home = () => {
   const { currentUser, loading, errorDispatch } = useSelector(
@@ -21,7 +24,7 @@ const Home = () => {
 
   // console.log(allNotes)
 
-  
+  const navigate = useNavigate()
 
   const [openAddEditModal, setOpenAddEditModal] = useState({
     isShown: false,
@@ -30,21 +33,27 @@ const Home = () => {
   })
 
   useEffect(() => {
-    if (currentUser) {
-      setUserInfo(currentUser?.rest)
-      getAllNotes()
-    } else {
-      setUserInfo(null)
-      setAllNotes([])
+    if (!currentUser) {
+      navigate("/login")
+      return
+      
+    } else  {
+      setUserInfo(currentUser)
     }
+    getAllNotes()
+    
   }, [currentUser])
 
   // get all notes
   const getAllNotes = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/note/all", {
-        withCredentials: true,
-      })
+     const token = localStorage.getItem("access_token"); // or from Redux
+
+      const res = await axios.get(`${API_BASE_URL}/api/note/all`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
 
       if (res.data.success === false) {
         console.log(res.data)
@@ -68,9 +77,14 @@ const Home = () => {
     const noteId = data._id
 
     try {
+      const token = localStorage.getItem("access_token");
       const res = await axios.delete(
-        "http://localhost:3000/api/note/delete/" + noteId,
-        { withCredentials: true }
+        `${API_BASE_URL}/api/note/delete/${noteId}`,{
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+        }
+        
       )
 
       if (res.data.success === false) {
@@ -87,9 +101,12 @@ const Home = () => {
 
   const onSearchNote = async (query) => {
     try {
-      const res = await axios.get("http://localhost:3000/api/note/search", {
+      const token = localStorage.getItem("access_token");
+      const res = await axios.get(`${API_BASE_URL}/api/note/search`, {
         params: { query },
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       })
 
       if (res.data.success === false) {
@@ -114,10 +131,15 @@ const Home = () => {
     const noteId = noteData._id
 
     try {
+      const token = localStorage.getItem("access_token");
       const res = await axios.put(
-        "http://localhost:3000/api/note/updatePin/" + noteId,
+        `${API_BASE_URL}/api/note/updatePin/${noteId}`,
         { isPinned: !noteData.isPinned },
-        { withCredentials: true }
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
       )
 
       if (res.data.success === false) {

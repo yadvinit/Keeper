@@ -2,6 +2,8 @@ import React,{useState} from 'react'
 import { MdClose } from "react-icons/md";
 import TagInput from '../../components/Input/TagInput'
 import axios from 'axios'
+import { API_BASE_URL } from "../../config/api";
+
 
 
 const AddEditNotes = ({onClose,noteData,type,getAllNotes}) => {
@@ -15,9 +17,14 @@ const AddEditNotes = ({onClose,noteData,type,getAllNotes}) => {
     const editNote= async()=>{
         const noteId = noteData._id
         try {
+            const token = localStorage.getItem("access_token");
+             const res = await axios.put(`${API_BASE_URL}/api/note/edit/${noteId}`,
+                {title,content,tags},{
+                  headers:{
+                    Authorization: `Bearer ${token}`
+                  }
+                })
             
-            const res = await axios.put("http://localhost:3000/api/note/edit/" + noteId,
-            {title,content,tags},{withCredentials:true})
 
             if(res.data.success === false){
                 setError(res.data.message)
@@ -37,8 +44,13 @@ const AddEditNotes = ({onClose,noteData,type,getAllNotes}) => {
 
     const addNewNote= async()=>{
         try {
-            const res = await axios.post("http://localhost:3000/api/note/add",
-                {title,content,tags},{withCredentials:true})
+            const token = localStorage.getItem("access_token");
+            const res = await axios.post(`${API_BASE_URL}/api/note/add`,
+                {title,content,tags},{
+                    headers:{
+                        Authorization:`Bearer ${token}`
+                    }
+                })
 
             if(res.data.success === false){
                 setError(res.data.message)

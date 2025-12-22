@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { signOutStart, signOutSuccess, signOutFailure } from '../redux/user/userSlice'
+import { API_BASE_URL } from "../config/api";
 
 const Navbar = ({userInfo,onSearchNote,handleClearSearch}) => {
     const [searchQuery, setSearchQuery] = useState('')
@@ -22,14 +23,19 @@ const Navbar = ({userInfo,onSearchNote,handleClearSearch}) => {
     const onLogout = async() => {
        try {
             dispatch(signOutStart())
-            const res = await axios.get("http://localhost:3000/api/auth/logout",{withCredentials:true})
+            const token = localStorage.getItem("access_token");
+            const res = await axios.get(`${API_BASE_URL}/api/auth/logout`,{
+                headers:{
+                    Authorization:`Bearer ${token}`
+                }
+            })
             if(res.data.success===false){
                 dispatch(signOutFailure(res.data.message))
-                
                 toast.error(res.data.message)
                 return
             }
             toast.success(res.data.message)
+            localStorage.removeItem("access_token")
             dispatch(signOutSuccess())
             navigate('/login')
         

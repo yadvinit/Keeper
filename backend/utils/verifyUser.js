@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken"
 import errorHandler  from "./error.js"
 
 const verifyUser = (req,res,next) =>{
-    const token = req.cookies.access_token
+    const token = req.headers.authorization.split(" ")[1]; // Bearer token
 
     if(!token){
         return next(errorHandler(401,"You are not authenticated"))
