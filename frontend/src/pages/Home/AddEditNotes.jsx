@@ -2,7 +2,7 @@ import React,{useState} from 'react'
 import { MdClose } from "react-icons/md";
 import TagInput from '../../components/Input/TagInput'
 import axios from 'axios'
-import { API_BASE_URL } from "../../config/api";
+// axios default baseURL is set in main.jsx
 
 
 
@@ -18,7 +18,7 @@ const AddEditNotes = ({onClose,noteData,type,getAllNotes}) => {
         const noteId = noteData._id
         try {
             const token = localStorage.getItem("access_token");
-             const res = await axios.put(`${API_BASE_URL}/api/note/edit/${noteId}`,
+             const res = await axios.put(`/api/note/edit/${noteId}`,
                 {title,content,tags},{
                   headers:{
                     Authorization: `Bearer ${token}`
@@ -45,7 +45,7 @@ const AddEditNotes = ({onClose,noteData,type,getAllNotes}) => {
     const addNewNote= async()=>{
         try {
             const token = localStorage.getItem("access_token");
-            const res = await axios.post(`${API_BASE_URL}/api/note/add`,
+            const res = await axios.post(`/api/note/add`,
                 {title,content,tags},{
                     headers:{
                         Authorization:`Bearer ${token}`

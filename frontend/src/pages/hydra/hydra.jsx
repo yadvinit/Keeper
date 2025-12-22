@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { validateEmail } from '../../utils/helper'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
-import { API_BASE_URL } from "../../config/api";
+import { HYDRA_ADMIN_URL } from "../../config/api";
 
 
 const Hydra= () => {
@@ -35,8 +35,8 @@ const Hydra= () => {
     //signup api
 
     try {
-      const res = await axios.put(
-				`${HYDRA_ADMIN_URL}/oauth2/auth/requests/login/accept`,
+            const res = await axios.put(
+          `${HYDRA_ADMIN_URL}/oauth2/auth/requests/login/accept`,
         {username:Username,email,password})
 
       if(res.data.success === false){
