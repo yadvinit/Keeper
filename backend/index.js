@@ -28,7 +28,6 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions)); // to allow cross origin requests
-app.options('/*', cors(corsOptions)); // enable preflight handling
  
 
 
