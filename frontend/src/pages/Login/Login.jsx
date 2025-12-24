@@ -7,6 +7,8 @@ import {useDispatch} from "react-redux"
 import axios from 'axios'
 import {signInStart,signInFailure,signInSuccess} from "../../redux/user/userSlice"
 // axios default baseURL is set in main.jsx
+import { API_BASE_URL } from '../../config/api'
+
 
 
 const Login = () => {
@@ -32,7 +34,7 @@ const Login = () => {
     try {
 
       dispatch(signInStart())
-      const res = await axios.post('/api/auth/login',{email,password})
+      const res = await axios.post(`${API_BASE_URL}/api/auth/login`,{email,password})
 
       if(res.data.success === false){
         dispatch(signInFailure(res.data.message))

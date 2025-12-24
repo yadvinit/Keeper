@@ -6,6 +6,7 @@ import { validateEmail } from '../../utils/helper'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 // axios default baseURL is set in main.jsx
+import { API_BASE_URL } from '../../config/api'
 
 
 const Signup= () => {
@@ -35,7 +36,7 @@ const Signup= () => {
     //signup api
 
     try {
-      const res = await axios.post('/api/auth/signup',
+      const res = await axios.post(`${API_BASE_URL}/api/auth/signup`,
         {username:Username,email,password})
 
       if(res.data.success === false){

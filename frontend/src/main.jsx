@@ -8,9 +8,6 @@ import {PersistGate} from "redux-persist/integration/react"
 import axios from 'axios'
 import { API_BASE_URL } from './config/api'
 
-// Global axios defaults: set API base URL and include credentials for CORS
-axios.defaults.baseURL = API_BASE_URL || ''
-axios.defaults.withCredentials = true
 
 
 createRoot(document.getElementById('root')).render(

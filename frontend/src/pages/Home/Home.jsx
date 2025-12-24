@@ -10,6 +10,8 @@ import { toast } from "react-toastify"
 import EmptyCard from "../../components/Cards/EmptyCard"
 import { useNavigate } from "react-router-dom"
 // axios default baseURL is set in main.jsx
+import { API_BASE_URL } from '../../config/api'
+
 
 
 const Home = () => {
@@ -49,7 +51,7 @@ const Home = () => {
     try {
      const token = localStorage.getItem("access_token"); // or from Redux
 
-      const res = await axios.get('/api/note/all', {
+      const res = await axios.get(`${API_BASE_URL}/api/note/all`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -79,7 +81,7 @@ const Home = () => {
     try {
       const token = localStorage.getItem("access_token");
       const res = await axios.delete(
-        `/api/note/delete/${noteId}`,{
+        `${API_BASE_URL}/api/note/delete/${noteId}`,{
           headers:{
             Authorization: `Bearer ${token}`
           }
@@ -102,7 +104,7 @@ const Home = () => {
   const onSearchNote = async (query) => {
     try {
       const token = localStorage.getItem("access_token");
-      const res = await axios.get('/api/note/search', {
+      const res = await axios.get(`${API_BASE_URL}/api/note/search`, {
         params: { query },
         headers: {
           Authorization: `Bearer ${token}`
@@ -133,7 +135,7 @@ const Home = () => {
     try {
       const token = localStorage.getItem("access_token");
       const res = await axios.put(
-        `/api/note/updatePin/${noteId}`,
+        `${API_BASE_URL}/api/note/updatePin/${noteId}`,
         { isPinned: !noteData.isPinned },
         {
           headers: {
