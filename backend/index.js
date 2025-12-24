@@ -20,16 +20,7 @@ app.use(cookieParser())
 // Configure CORS: reflect the request origin if CORS_ORIGIN is not set,
 // enable credentials so cookies / auth headers work when needed,
 // and handle preflight requests.
-const corsOptions = {
-  origin: process.env.CORS_ORIGIN,
-  methods: ['GET','HEAD','PUT','PATCH','POST','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization']
-}
-
-app.use(cors(corsOptions)); // to allow cross origin requests
-
- 
-
+app.use(cors({ origin: '*' }));
 
 let isConnected = false;
 const connectDB = async () => {
