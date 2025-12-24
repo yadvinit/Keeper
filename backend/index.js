@@ -47,7 +47,9 @@ const connectDB = async () => {
 };
 
 connectDB();
-
+app.get('/', (req, res) => {
+  res.send('Server is running');
+});
 app.use('/api/auth',authRouter) //app.use(path, router)
 app.use('/api/note',noteRouter)
 
