@@ -21,13 +21,13 @@ app.use(cookieParser())
 // enable credentials so cookies / auth headers work when needed,
 // and handle preflight requests.
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN || true,
-  credentials: true,
+  origin: process.env.CORS_ORIGIN,
   methods: ['GET','HEAD','PUT','PATCH','POST','DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type','Authorization']
 }
 
 app.use(cors(corsOptions)); // to allow cross origin requests
+app.options('/*', cors(corsOptions));
  
 
 
